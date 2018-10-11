@@ -1,5 +1,13 @@
 import './assets/scss/app.scss';
 import $ from 'cash-dom';
+import 'es6-promise';
+// "whatwg-fetch" library support browser
+// Chrome
+// Firefox
+// Safari 6.1+
+// Internet Explorer 10+
+import {fetch as fetchPolyfill} from 'whatwg-fetch'
+
 
 export class App {
 
@@ -12,7 +20,7 @@ export class App {
             // an asynchronous query requires a promise
             self.getUser(userName)
                 .then(function (body) {
-                    if (body.message !== "Not Found"){
+                    if (body){
                         self.profile = body;
                         self.update_profile();
                     }
@@ -25,8 +33,13 @@ export class App {
     }
 
     getUser(userName) {
-        return fetch(`https://api.github.com/users/${userName}`)
-            .then(response => response.json())
+        return fetchPolyfill(`https://api.github.com/users/${userName}`)
+            .then(function(response) {
+                if (response.status >= 400) {
+                    return null;
+                }
+                return response.json();
+            })
             .then(response => {
                 return response;
             })// ensure basic handling of the exception
