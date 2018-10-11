@@ -13,6 +13,7 @@ export class App {
         $('.load-username').on('click', function (e) {
             let userName = $('.username.input').val();
             if (self.checkValueIsValid(userName)) {
+                $('#spinner').removeClass("is-hidden");
                 self.setBorderForInutSearch();
                 self.getUser(userName)
                     .then(function (body) {
@@ -42,6 +43,7 @@ export class App {
                         else {
                             alert("The user you are looking for does not exist!");
                         }
+                        $('#spinner').addClass('is-hidden');
                     });
             }
             else {
