@@ -20,11 +20,21 @@ export class App {
             // an asynchronous query requires a promise
             self.getUser(userName)
                 .then(function (body) {
-                    if (body){
-                        self.profile = body;
-                        self.update_profile();
+                    if (body) {
+                        self.update_profile(body);
+                        return self.getUserRepo(userName)
+                            .then(function (repository) {
+                                if (repository) {
+                                    console.log("repository", repository);
+                                    self.update_repository(repository);
+                                }
+                                else {
+                                    // handle the case when we receive information about the lack of a user in the database
+                                    alert("The user you are looking for doesn't have repository!");
+                                }
+                            })
                     }
-                    else{
+                    else {
                         // handle the case when we receive information about the lack of a user in the database
                         alert("The user you are looking for does not exist!");
                     }
@@ -34,7 +44,7 @@ export class App {
 
     getUser(userName) {
         return fetchPolyfill(`https://api.github.com/users/${userName}`)
-            .then(function(response) {
+            .then(function (response) {
                 if (response.status >= 400) {
                     return null;
                 }
@@ -46,11 +56,30 @@ export class App {
             .catch(error => console.error('Error:', error));
     }
 
-    update_profile() {
-        let self = this;
+    getUserRepo(userName) {
+        return fetch(`https://api.github.com/users/${userName}/repos`)
+            .then(function (response) {
+                if (response.status >= 400) {
+                    return null;
+                }
+                return response.json();
+            })
+            .then(response => {
+                return response;
+            })
+    }
+
+
+    update_repository(repository) {
+        for (let i = 0; i < repository.length; i++) {
+            $('#repository').append("<li>" + repository[i].name + "</li>");
+        }
+    }
+
+    update_profile(profil) {
         $('#profile-name').text($('.username.input').val());
-        $('#profile-image').attr('src', self.profile.avatar_url);
-        $('#profile-url').attr('href', self.profile.html_url).text(self.profile.login);
-        $('#profile-bio').text(self.profile.bio || '(no information)')
+        $('#profile-image').attr('src', profil.avatar_url);
+        $('#profile-url').attr('href', profil.html_url).text(profil.login);
+        $('#profile-bio').text(profil.bio || '(no information)')
     }
 }
