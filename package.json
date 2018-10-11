@@ -34,6 +34,7 @@
     "cash-dom": "^2.1.7",
     "es6-promise": "^4.2.5",
     "isomorphic-fetch": "^2.2.1",
+    "validator": "^10.8.0",
     "whatwg-fetch": "^3.0.0"
   }
 }
