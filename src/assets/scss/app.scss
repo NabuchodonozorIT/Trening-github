@@ -6,20 +6,38 @@
   margin-bottom: 8px;
 }
 
-.gh-username img{
+.gh-username img {
   width: 32px;
   float: left;
   margin: 2px;
 }
 
-#profile-bio{
-  margin-top:10px;
+#profile-bio {
+  margin-top: 10px;
 }
 
 .timeline .timeline-item {
-  padding-bottom:1em;
+  padding-bottom: 1em;
 }
 
-ul.circle-ul{
+ul.circle-ul {
   list-style-type: circle;
+}
+
+@media all and (max-width: 768px) {
+  .column.is-one-third-tablet {
+    width: 100% !important;
+  }
+}
+
+@media all and (max-width: 1279px) {
+  .column.is-one-third-tablet {
+    width: 50% !important;
+  }
+}
+
+@media all and (max-width: 1280px) {
+  .column.is-one-third-tablet {
+    width: 33% !important;
+  }
 }
